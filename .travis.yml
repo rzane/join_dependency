@@ -1,5 +1,15 @@
-sudo: false
 language: ruby
+
 rvm:
-  - 2.3.3
+  - 2.4.0
+
 before_install: gem install bundler -v 1.16.1
+
+env:
+  matrix:
+    - AR=4.2.10
+    - AR=5.0.6
+    - AR=5.1.5
+    - AR=5.2.0.rc1
+    - AR=latest
+
