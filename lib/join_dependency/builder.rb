@@ -9,24 +9,29 @@ module JoinDependency
     end
 
     def to_join_dependency
-      buckets = relation.joins_values
-      buckets += relation.left_outer_joins_values if at_least?(5)
+      joins = []
+      joins += relation.joins_values
+      joins += relation.left_outer_joins_values if at_least?(5)
 
-      buckets = buckets.group_by do |join|
+      buckets = joins.group_by do |join|
         case join
         when String
           :string_join
         when Hash, Symbol, Array
           :association_join
-        when Polyamorous::JoinDependency, Polyamorous::JoinAssociation
-          :stashed_join
         when Arel::Nodes::Join
           :join_node
         else
-          raise 'unknown class: %s' % join.class.name
+          (block_given? && yield(join)) || raise("unknown class: %s" % join.class.name)
         end
       end
 
+      build(buckets)
+    end
+
+    private
+
+    def build(buckets)
       buckets.default = []
       association_joins         = buckets[:association_join]
       stashed_association_joins = buckets[:stashed_join]
@@ -60,7 +65,8 @@ module JoinDependency
       end
     end
 
-    private
+    def unknown_join!(join)
+    end
 
     def at_least?(major, minor = 0)
       ActiveRecord::VERSION::MAJOR >= major && ActiveRecord::VERSION::MINOR >= minor
