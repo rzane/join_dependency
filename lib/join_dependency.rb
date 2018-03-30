@@ -36,14 +36,16 @@ module JoinDependency
       string_joins              = buckets[:string_join].map(&:strip).uniq
 
       join_list =
-        if at_least?(5)
+        if at_least?(5, 2)
+          join_nodes + relation.send(:convert_join_strings_to_ast, string_joins)
+        elsif at_least?(5)
           join_nodes + relation.send(:convert_join_strings_to_ast, relation.table, string_joins)
         else
           relation.send(:custom_join_ast, relation.table.from(relation.table), string_joins)
         end
 
       if at_least?(5, 2)
-        alias_tracker = ::ActiveRecord::Associations::AliasTracker.create(klass.connection, relation.table.name, join_list)
+        alias_tracker = ::ActiveRecord::Associations::AliasTracker.create(relation.klass.connection, relation.table.name, join_list)
         join_dependency = ::ActiveRecord::Associations::JoinDependency.new(relation.klass, relation.table, association_joins, alias_tracker)
         join_nodes.each do |join|
           join_dependency.send(:alias_tracker).aliases[join.left.name.downcase] = 1

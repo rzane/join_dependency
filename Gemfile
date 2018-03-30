@@ -1,6 +1,14 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
-
 # Specify your gem's dependencies in join_dependency.gemspec
 gemspec
+
+case ENV.fetch('AR', 'latest')
+when 'latest'
+  gem 'activerecord'
+when 'master'
+  gem 'activerecord', github: 'https://github.com/rails/rails'
+else
+  gem 'activerecord', ENV['AR']
+end
+
