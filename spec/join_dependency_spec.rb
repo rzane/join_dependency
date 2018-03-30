@@ -12,13 +12,13 @@ RSpec.describe JoinDependency do
 
   it "can convert a relation to a join dependency" do
     relation = Post.joins(:author)
-    jd = JoinDependency.from(relation)
+    jd = JoinDependency.from_relation(relation)
     expect(jd).to be_an(ActiveRecord::Associations::JoinDependency)
   end
 
   it "includes association join children" do
     relation = Post.joins(:author)
-    jd = JoinDependency.from(relation)
+    jd = JoinDependency.from_relation(relation)
     children = jd.send(:join_root).children
     reflection = children.first.reflection
 
@@ -29,14 +29,14 @@ RSpec.describe JoinDependency do
     relation = Post.joins(custom)
 
     expect {
-      JoinDependency.from(relation)
+      JoinDependency.from_relation(relation)
     }.to raise_error(RuntimeError, 'unknown class: CustomJoin')
   end
 
   it "allows injecting a custom join" do
     relation = Post.joins(custom)
 
-    jd = JoinDependency.from(relation) do |join|
+    jd = JoinDependency.from_relation(relation) do |join|
       expect(join).to eq(custom)
       :stashed_join
     end
@@ -48,7 +48,7 @@ RSpec.describe JoinDependency do
     relation = Post.joins(custom)
 
     expect {
-      JoinDependency.from(relation) do |join|
+      JoinDependency.from_relation(relation) do |join|
         expect(join).to eq(custom)
         nil
       end
