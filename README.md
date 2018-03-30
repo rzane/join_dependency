@@ -1,4 +1,4 @@
-# JoinDependency
+# JoinDependency [![Build Status](https://travis-ci.org/rzane/join_dependency.svg?branch=master)](https://travis-ci.org/rzane/join_dependency)
 
 This is a module with a singular purpose. It creates an `ActiveRecord::Associations::JoinDependency` from an `ActiveRecord::Relation`. That's it.
 
