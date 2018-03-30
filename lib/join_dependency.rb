@@ -55,11 +55,7 @@ module JoinDependency
         end
       end
 
-      if at_least?(4, 1)
-        join_dependency
-      else
-        join_dependency.graft(*stashed_association_joins)
-      end
+      join_dependency
     end
 
     def at_least?(major, minor = 0)
