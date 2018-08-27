@@ -39,8 +39,7 @@ module JoinDependency
 
       joins = string_joins.map do |join|
         table.create_string_join(Are.sql(join)) unless join.blank?
-      end
-      joins.compact
+      end.compact
 
       join_list =
         if at_least?(5)
