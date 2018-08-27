@@ -36,12 +36,12 @@ module JoinDependency
       stashed_association_joins = buckets[:stashed_join]
       join_nodes                = buckets[:join_node].uniq
       string_joins              = buckets[:string_join].map(&:strip).uniq
-      
+
       joins = string_joins.map do |join|
         table.create_string_join(Are.sql(join)) unless join.blank?
       end
       joins.compact
-      
+
       join_list =
         if at_least?(5)
           join_nodes + joins
