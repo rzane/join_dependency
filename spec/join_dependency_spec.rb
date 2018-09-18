@@ -11,11 +11,9 @@ RSpec.describe JoinDependency do
   end
 
   it "can convert a relation to a join dependency" do
-    [:author, 'author'].each do |join_dep|
-      relation = Post.joins(:author)
-      jd = JoinDependency.from_relation(relation)
-      expect(jd).to be_an(ActiveRecord::Associations::JoinDependency)
-    end
+    relation = Post.joins(:author)
+    jd = JoinDependency.from_relation(relation)
+    expect(jd).to be_an(ActiveRecord::Associations::JoinDependency)
   end
 
   it "includes association join children" do

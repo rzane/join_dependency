@@ -38,7 +38,7 @@ module JoinDependency
       string_joins              = buckets[:string_join].map(&:strip).uniq
 
       joins = string_joins.map do |join|
-        relation.table.create_string_join(Arel.sql(join)) unless join.blank?
+        table.create_string_join(Are.sql(join)) unless join.blank?
       end.compact
 
       join_list =
